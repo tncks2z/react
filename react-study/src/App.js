@@ -4,6 +4,7 @@ import { useState } from 'react';
 function App() {
   const [titles, setTitles] = useState(['남자 코트 추천', '강남 우동 맛집', '파이썬 독학']); //자바스크립트의 Destruturing 문법
   const [good, setGood] = useState(0);
+  const [modal, setModal] = useState(false);
   return (
     <div className="App">
       <div className="black-nav">
@@ -32,7 +33,11 @@ function App() {
         글 제목 수정
       </button>
       <div className="list">
-        <h4>
+        <h4
+          onClick={() => {
+            setModal(!modal);
+          }}
+        >
           {titles[0]}{' '}
           <span
             onClick={() => {
@@ -57,7 +62,7 @@ function App() {
         </h4>
         <p>3월 19일 발행</p>
       </div>
-      <Modal />
+      {modal === true ? <Modal /> : null}
     </div>
   );
 }
