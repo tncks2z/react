@@ -6,6 +6,7 @@ function App() {
   const [goods, setGoods] = useState([0, 0, 0]);
   const [modal, setModal] = useState(false);
   const [index, setIndex] = useState(0);
+  const [newTitleInput, setNewTitleInput] = useState('');
   return (
     <div className="App">
       <div className="black-nav">
@@ -13,7 +14,6 @@ function App() {
       </div>
       <button
         type="button"
-        className="btn"
         onClick={() => {
           let sortTitle = [...titles];
           sortTitle.sort();
@@ -23,7 +23,6 @@ function App() {
       </button>
       <button
         type="button"
-        className="btn"
         onClick={() => {
           let copyTitle = [...titles]; // ... -> 괄호 벗겨주세요
           copyTitle[0] = '여자 코트 추천';
@@ -31,29 +30,58 @@ function App() {
         }}>
         글 제목 수정
       </button>
-      {titles.map(function (item, index) {
+      {titles.map(function (item, i) {
         return (
-          <div className="list" key={index}>
+          <div className="list" key={i}>
             <h4
-              onClick={() => {
-                setModal(!modal);
-                setIndex(index);
+              onClick={(e) => {
+                if (e.target === e.currentTarget) {
+                  setModal(!modal);
+                  setIndex(i);
+                }
               }}>
-              {titles[index]}{' '}
+              {titles[i]}{' '}
               <span
                 onClick={() => {
                   let copyGood = [...goods];
-                  copyGood[index] = copyGood[index] + 1;
+                  copyGood[i] = copyGood[i] + 1;
                   setGoods(copyGood);
                 }}>
                 👍
               </span>{' '}
-              <span>{goods[index]}</span>
+              <span>{goods[i]}</span>{' '}
+              <button
+                type="button"
+                onClick={() => {
+                  let copyTitles = [...titles];
+                  copyTitles.splice(i, 1);
+                  setTitles(copyTitles);
+                }}>
+                삭제
+              </button>
             </h4>
             <p>3월 19일 발행</p>
           </div>
         );
       })}
+      <div className="form-input">
+        <input
+          id="inputTitle"
+          type="text"
+          onChange={(e) => {
+            setNewTitleInput(e.target.value);
+          }}
+        />
+        <button
+          onClick={() => {
+            let copyTitles = [...titles];
+            copyTitles.unshift(newTitleInput);
+            setTitles(copyTitles);
+            document.getElementById('inputTitle').value = '';
+          }}>
+          추가
+        </button>
+      </div>
       {modal === true ? (
         <Modal
           changeTitle={function () {
@@ -75,7 +103,7 @@ function Modal(props) {
       <h4>{props.titles[props.index]}</h4>
       <p>날짜</p>
       <p>상세내용</p>
-      <button className="btn" type="button" onClick={props.changeTitle}>
+      <button type="button" onClick={props.changeTitle}>
         글수정
       </button>
     </div>
