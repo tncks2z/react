@@ -3,7 +3,7 @@ import { useState } from 'react';
 
 function App() {
   const [titles, setTitles] = useState(['남자 코트 추천', '강남 우동 맛집', '파이썬 독학']); //자바스크립트의 Destruturing 문법
-  const [good, setGood] = useState(0);
+  const [goods, setGoods] = useState([0, 0, 0]);
   const [modal, setModal] = useState(false);
   return (
     <div className="App">
@@ -32,47 +32,53 @@ function App() {
       >
         글 제목 수정
       </button>
-      <div className="list">
-        <h4
-          onClick={() => {
-            setModal(!modal);
+      {titles.map(function (item, i) {
+        return (
+          <div className="list" key={i}>
+            <h4
+              onClick={() => {
+                setModal(!modal);
+              }}
+            >
+              {titles[i]}{' '}
+              <span
+                onClick={() => {
+                  let copyGood = [...goods];
+                  copyGood[i] = copyGood[i] + 1;
+                  setGoods(copyGood);
+                }}
+              >
+                👍
+              </span>{' '}
+              <span>{goods[i]}</span>
+            </h4>
+            <p>3월 19일 발행</p>
+          </div>
+        );
+      })}
+      {modal === true ? (
+        <Modal
+          changeTitle={function () {
+            let copyTitle = [...titles];
+            copyTitle[0] = '여자 코트 추천';
+            setTitles(copyTitle);
           }}
-        >
-          {titles[0]}{' '}
-          <span
-            onClick={() => {
-              setGood(good + 1);
-            }}
-          >
-            👍
-          </span>{' '}
-          {good}{' '}
-        </h4>
-        <p>3월 19일 발행</p>
-      </div>
-      <div className="list">
-        <h4>
-          {titles[1]} <span>👍</span>
-        </h4>
-        <p>3월 19일 발행</p>
-      </div>
-      <div className="list">
-        <h4>
-          {titles[2]} <span>👍</span>
-        </h4>
-        <p>3월 19일 발행</p>
-      </div>
-      {modal === true ? <Modal /> : null}
+          titles={titles}
+        />
+      ) : null}
     </div>
   );
 }
 
-function Modal() {
+function Modal(props) {
   return (
     <div className="modal">
-      <h4>글제목</h4>
+      <h4>{props.titles[0]}</h4>
       <p>날짜</p>
       <p>상세내용</p>
+      <button className="btn" type="button" onClick={props.changeTitle}>
+        글수정
+      </button>
     </div>
   );
 }
