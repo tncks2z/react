@@ -21,15 +21,6 @@ function App() {
         }}>
         가나다순 정렬
       </button>
-      <button
-        type="button"
-        onClick={() => {
-          let copyTitle = [...titles]; // ... -> 괄호 벗겨주세요
-          copyTitle[0] = '여자 코트 추천';
-          setTitles(copyTitle);
-        }}>
-        글 제목 수정
-      </button>
       {titles.map(function (item, i) {
         return (
           <div className="list" key={i}>
@@ -43,9 +34,9 @@ function App() {
               {titles[i]}{' '}
               <span
                 onClick={() => {
-                  let copyGood = [...goods];
-                  copyGood[i] = copyGood[i] + 1;
-                  setGoods(copyGood);
+                  let copyGoods = [...goods];
+                  copyGoods[i] = copyGoods[i] + 1;
+                  setGoods(copyGoods);
                 }}>
                 👍
               </span>{' '}
@@ -56,6 +47,9 @@ function App() {
                   let copyTitles = [...titles];
                   copyTitles.splice(i, 1);
                   setTitles(copyTitles);
+                  let copyGoods = [...goods];
+                  copyGoods.splice(i, 1);
+                  setGoods(copyGoods);
                 }}>
                 삭제
               </button>
@@ -74,10 +68,15 @@ function App() {
         />
         <button
           onClick={() => {
-            let copyTitles = [...titles];
-            copyTitles.unshift(newTitleInput);
-            setTitles(copyTitles);
-            document.getElementById('inputTitle').value = '';
+            if (newTitleInput.length !== 0) {
+              let copyTitles = [...titles];
+              copyTitles.unshift(newTitleInput);
+              setTitles(copyTitles);
+              document.getElementById('inputTitle').value = '';
+              let copyGoods = [...goods];
+              copyGoods.unshift(0);
+              setGoods(copyGoods);
+            }
           }}>
           추가
         </button>
