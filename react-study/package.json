@@ -2,7 +2,7 @@
   "name": "react-study",
   "version": "0.1.0",
   "private": true,
-  "homepage": "http://tncks2z.githun.io/blog",
+  "homepage": "http://tncks2z.github.io/blog",
   "dependencies": {
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.4.0",
