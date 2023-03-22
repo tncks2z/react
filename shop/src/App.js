@@ -12,7 +12,6 @@ function App() {
 					<Nav.Link href='#pricing'>Pricing</Nav.Link>
 				</Nav>
 			</Navbar>
-			<Button></Button>
 		</div>
 	);
 }
