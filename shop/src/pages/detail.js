@@ -5,7 +5,7 @@ function Detail() {
 		<Container>
 			<Row>
 				<Col>
-					<img src='https://codingapple1.github.io/shop/shoes1.jpg' width='100%' />
+					<img src='https://codingapple1.github.io/shop/shoes1.jpg' alt='' width='100%' />
 				</Col>
 				<Col>
 					<h4 className='pt-5'>상품명</h4>
