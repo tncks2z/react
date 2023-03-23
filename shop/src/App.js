@@ -2,20 +2,32 @@ import './App.css';
 import { Container, Row, Col, Nav, Navbar } from 'react-bootstrap';
 import { useState } from 'react';
 import data from './data.js';
+import { Routes, Route } from 'react-router-dom';
+import Detail from './detail.js';
 
 function App() {
-	const [shoes, setShoes] = useState(data);
+	const [shoes] = useState(data);
 	return (
 		<div className='App'>
 			<Navbar bg='light' variant='light' className='ps-3'>
-				<Navbar.Brand href='#home'>수찬이네</Navbar.Brand>
+				<Navbar.Brand href='/'>수찬이네</Navbar.Brand>
 				<Nav className='me-auto'>
-					<Nav.Link href='#home'>Home</Nav.Link>
-					<Nav.Link href='#cart'>Cart</Nav.Link>
+					<Nav.Link href='/'>Home</Nav.Link>
+					<Nav.Link href='/detail'>Detail</Nav.Link>
+					<Nav.Link href='/cart'>Cart</Nav.Link>
 				</Nav>
 			</Navbar>
-			<div className='main-bg'></div>
-			<ItemList shoes={shoes}></ItemList>
+			<Routes>
+				<Route
+					path='/'
+					element={
+						<>
+							<div className='main-bg'></div>
+							<ItemList shoes={shoes}></ItemList>
+						</>
+					}></Route>
+				<Route path='/detail' element={<Detail />}></Route>
+			</Routes>
 		</div>
 	);
 	function ItemList(props) {
