@@ -1,11 +1,20 @@
+import { useEffect, useState } from 'react';
 import { Container, Row, Col } from 'react-bootstrap';
 import { useParams } from 'react-router-dom';
 
 function Detail(props) {
+	const [isAlert, setIsAlert] = useState(true);
+	useEffect(() => {
+		setTimeout(() => {
+			setIsAlert(false);
+		}, 2000);
+	});
+
 	const { id } = useParams();
-	const filterItem = props.shoes.find((item) => item.id == id);
+	const filterItem = props.shoes.find((item) => item.id === Number(id));
 	return (
 		<Container>
+			{isAlert ? <div className='alert alert-danger'>2초이내 구매시 할인</div> : null}
 			<Row>
 				<Col>
 					<img src={'https://codingapple1.github.io/shop/shoes' + (Number(filterItem.id) + 1) + '.jpg'} alt='' width='100%' />
