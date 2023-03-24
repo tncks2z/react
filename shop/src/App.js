@@ -4,6 +4,7 @@ import { useState } from 'react';
 import data from './data.js';
 import { Routes, Route, Link, useNavigate, Outlet } from 'react-router-dom';
 import Detail from './pages/detail';
+import { Axios } from 'axios';
 
 function App() {
 	const [shoes] = useState(data);
