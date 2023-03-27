@@ -33,6 +33,12 @@ function App() {
 						}}>
 						About
 					</Nav.Link>
+					<Nav.Link
+						onClick={() => {
+							navigate('/event');
+						}}>
+						Event
+					</Nav.Link>
 					{/* <Nav.Link href='/cart'>Cart</Nav.Link> */}
 				</Nav>
 			</Navbar>
