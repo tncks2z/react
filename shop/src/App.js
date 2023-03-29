@@ -1,14 +1,17 @@
 import './App.css';
 import { Container, Row, Col, Nav, Navbar } from 'react-bootstrap';
-import { useState } from 'react';
+import { createContext, useState } from 'react';
 import data from './data.js';
 import { Routes, Route, Link, useNavigate, Outlet } from 'react-router-dom';
 import Detail from './pages/detail';
 import axios from 'axios';
 
+export let Context1 = createContext();
+
 function App() {
 	const [shoes, setShoes] = useState(data);
 	const [moreCnt, setMoreCnt] = useState(0);
+	const [stock, setStock] = useState([10, 12, 15]);
 	const navigate = useNavigate();
 	return (
 		<div className='App'>
@@ -83,7 +86,13 @@ function App() {
 							)}
 						</>
 					}></Route>
-				<Route path='/detail/:id' element={<Detail shoes={shoes} />}></Route>
+				<Route
+					path='/detail/:id'
+					element={
+						<Context1.Provider value={{ stock }}>
+							<Detail shoes={shoes} />
+						</Context1.Provider>
+					}></Route>
 				<Route path='/about' element={<About />}>
 					<Route path='member' element={<h3>멤버임</h3>}></Route>
 					<Route path='location' element={<h3>위치정보임</h3>}></Route>
