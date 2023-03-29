@@ -8,6 +8,7 @@ function Detail(props) {
 	const [userInput, setUserInput] = useState('');
 	const [isNumber, setIsNumber] = useState(true);
 	const [tab, setTab] = useState(0);
+	const [fade, setFade] = useState('');
 	useEffect(
 		// useEffect 뒤에 []추가시, mount 될때 1회만 해당코드 재생. 이후엔 노재생
 		() => {
@@ -33,9 +34,18 @@ function Detail(props) {
 	}, [userInput]);
 	const { id } = useParams();
 	const filterItem = props.shoes.find((item) => item.id === Number(id));
+	useEffect(() => {
+		setTimeout(() => {
+			setFade('animation-end');
+		}, 100);
+		return () => {
+			clearTimeout();
+			setFade('');
+		};
+	}, []);
 
 	return (
-		<Container>
+		<Container className={`animation-start ${fade}`}>
 			{/* {isAlert ? <div className='alert alert-danger'>2초이내 구매시 할인</div> : null} */}
 
 			<Row>
