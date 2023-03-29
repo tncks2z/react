@@ -1,7 +1,8 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useContext } from 'react';
 import { Container, Row, Col, InputGroup, Form, Nav } from 'react-bootstrap';
 import { useParams } from 'react-router-dom';
 import '../App.css';
+import { Context1 } from './../App';
 
 function Detail(props) {
 	const [isAlert, setIsAlert] = useState(true);
@@ -9,6 +10,8 @@ function Detail(props) {
 	const [isNumber, setIsNumber] = useState(true);
 	const [tab, setTab] = useState(0);
 	const [fade, setFade] = useState('');
+	const [shoes, setShoes] = useState(props.shoes);
+	const { stock } = useContext(Context1);
 	useEffect(
 		// useEffect 뒤에 []추가시, mount 될때 1회만 해당코드 재생. 이후엔 노재생
 		() => {
@@ -47,7 +50,6 @@ function Detail(props) {
 	return (
 		<Container className={`animation-start ${fade}`}>
 			{/* {isAlert ? <div className='alert alert-danger'>2초이내 구매시 할인</div> : null} */}
-
 			<Row>
 				<Col>
 					<img src={'https://codingapple1.github.io/shop/shoes' + (Number(filterItem.id) + 1) + '.jpg'} alt='' width='100%' />
@@ -85,11 +87,11 @@ function Detail(props) {
 					</Nav.Link>
 				</Nav.Item>
 			</Nav>
-			<TabContent tab={tab}></TabContent>
+			<TabContent tab={tab} shoes={shoes}></TabContent>
 		</Container>
 	);
 }
-function TabContent({ tab }) {
+function TabContent({ tab, shoes }) {
 	return [
 		<div className='tab-content'>
 			<h5>HTML</h5>
