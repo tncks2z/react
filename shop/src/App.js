@@ -49,6 +49,38 @@ function App() {
 						<>
 							<div className='main-bg'></div>
 							<ItemList shoes={shoes}></ItemList>
+							{moreCnt === 2 ? null : (
+								<button
+									onClick={() => {
+										moreCnt === 0
+											? axios
+													.get('https://codingapple1.github.io/shop/data2.json')
+													.then((res) => {
+														let copy = [...shoes, ...res.data];
+														setShoes(copy);
+													})
+													.catch((err) => {
+														console.log(err);
+													})
+											: moreCnt === 1
+											? axios
+													.get('https://codingapple1.github.io/shop/data3.json')
+													.then((res) => {
+														let copy = [...shoes, ...res.data];
+														setShoes(copy);
+													})
+													.catch((err) => {
+														console.log(err);
+													})
+											: alert('상품이 더 없습니다');
+										setMoreCnt(moreCnt + 1);
+										// 한번에 두개 이상 axios 요청할때
+										// Promise.all([axios.get('/url1'), axios.get('/url2')])
+										// 	.then((res) => { console.log(res); })
+									}}>
+									더보기
+								</button>
+							)}
 						</>
 					}></Route>
 				<Route path='/detail/:id' element={<Detail shoes={shoes} />}></Route>
@@ -61,38 +93,6 @@ function App() {
 					<Route path='two' element={<h4>생일기념 쿠폰 받기</h4>}></Route>
 				</Route>
 			</Routes>
-			{moreCnt === 2 ? null : (
-				<button
-					onClick={() => {
-						moreCnt === 0
-							? axios
-									.get('https://codingapple1.github.io/shop/data2.json')
-									.then((res) => {
-										let copy = [...shoes, ...res.data];
-										setShoes(copy);
-									})
-									.catch((err) => {
-										console.log(err);
-									})
-							: moreCnt === 1
-							? axios
-									.get('https://codingapple1.github.io/shop/data3.json')
-									.then((res) => {
-										let copy = [...shoes, ...res.data];
-										setShoes(copy);
-									})
-									.catch((err) => {
-										console.log(err);
-									})
-							: alert('상품이 더 없습니다');
-						setMoreCnt(moreCnt + 1);
-						// 한번에 두개 이상 axios 요청할때
-						// Promise.all([axios.get('/url1'), axios.get('/url2')])
-						// 	.then((res) => { console.log(res); })
-					}}>
-					더보기
-				</button>
-			)}
 		</div>
 	);
 	function ItemList(props) {

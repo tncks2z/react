@@ -12,6 +12,11 @@
 	background-position: center;
 	background-size: cover;
 }
+.tab-content {
+	border: #eee 10px solid;
+	padding: 20px;
+	text-align: left;
+}
 @media (prefers-reduced-motion: no-preference) {
 	.App-logo {
 		animation: App-logo-spin infinite 20s linear;
