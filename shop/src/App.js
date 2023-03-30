@@ -3,7 +3,8 @@ import { Container, Row, Col, Nav, Navbar } from 'react-bootstrap';
 import { createContext, useState } from 'react';
 import data from './data.js';
 import { Routes, Route, Link, useNavigate, Outlet } from 'react-router-dom';
-import Detail from './pages/detail';
+import Detail from './pages/Detail';
+import Cart from './pages/Cart';
 import axios from 'axios';
 
 export let Context1 = createContext();
@@ -42,7 +43,7 @@ function App() {
 						}}>
 						Event
 					</Nav.Link>
-					{/* <Nav.Link href='/cart'>Cart</Nav.Link> */}
+					<Nav.Link href='/cart'>Cart</Nav.Link>
 				</Nav>
 			</Navbar>
 			<Routes>
@@ -93,6 +94,7 @@ function App() {
 							<Detail shoes={shoes} />
 						</Context1.Provider>
 					}></Route>
+				<Route path='/cart' element={<Cart />}></Route>
 				<Route path='/about' element={<About />}>
 					<Route path='member' element={<h3>멤버임</h3>}></Route>
 					<Route path='location' element={<h3>위치정보임</h3>}></Route>
