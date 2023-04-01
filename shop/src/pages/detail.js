@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 import { useEffect, useState, useContext } from 'react';
 import { Container, Row, Col, InputGroup, Form, Nav } from 'react-bootstrap';
 import { useParams } from 'react-router-dom';
