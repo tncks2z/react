@@ -1,7 +1,7 @@
 /* eslint-disable */
 
 import './App.css';
-import { Container, Row, Col, Nav, Navbar } from 'react-bootstrap';
+import { Container, Row, Col, Nav, Navbar, Button } from 'react-bootstrap';
 import { createContext, useState } from 'react';
 import data from './data.js';
 import { Routes, Route, Link, useNavigate, Outlet } from 'react-router-dom';
@@ -45,7 +45,12 @@ function App() {
 						}}>
 						Event
 					</Nav.Link>
-					<Nav.Link href='/cart'>Cart</Nav.Link>
+					<Nav.Link
+						onClick={() => {
+							navigate('/cart');
+						}}>
+						Cart
+					</Nav.Link>
 				</Nav>
 			</Navbar>
 			<Routes>
@@ -56,7 +61,8 @@ function App() {
 							<div className='main-bg'></div>
 							<ItemList shoes={shoes}></ItemList>
 							{moreCnt === 2 ? null : (
-								<button
+								<Button
+									variant='secondary'
 									onClick={() => {
 										moreCnt === 0
 											? axios
@@ -85,7 +91,7 @@ function App() {
 										// 	.then((res) => { console.log(res); })
 									}}>
 									더보기
-								</button>
+								</Button>
 							)}
 						</>
 					}></Route>

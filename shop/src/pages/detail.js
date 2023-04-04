@@ -5,6 +5,8 @@ import { Container, Row, Col, InputGroup, Form, Nav } from 'react-bootstrap';
 import { useParams } from 'react-router-dom';
 import '../App.css';
 import { Context1 } from './../App';
+import { useDispatch } from 'react-redux';
+import { addItem } from '../store';
 
 function Detail(props) {
 	const [isAlert, setIsAlert] = useState(true);
@@ -13,12 +15,12 @@ function Detail(props) {
 	const [tab, setTab] = useState(0);
 	const [fade, setFade] = useState('');
 	const [shoes, setShoes] = useState(props.shoes);
-	const { stock } = useContext(Context1);
+	const dispatch = useDispatch();
+
 	useEffect(
-		// useEffect 뒤에 []추가시, mount 될때 1회만 해당코드 재생. 이후엔 노재생
 		() => {
 			// 두번째로 코드 실행
-			// 재랜더링마다 코드 실행
+			// 재랜더링마다 코드 실행 -> 뒤에 []추가시, mount 될때 1회만 해당코드 재생. 이후엔 노재생
 			let timer = setTimeout(() => {
 				setIsAlert(false);
 			}, 2000);
@@ -60,7 +62,19 @@ function Detail(props) {
 					<h4 className='pt-5'>{filterItem.title}</h4>
 					<h6>{filterItem.content}</h6>
 					<p>{[filterItem.price].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')} 원</p>
-					<button className='btn btn-danger'>주문하기</button>
+					<button
+						className='btn btn-danger'
+						onClick={() => {
+							dispatch(
+								addItem({
+									id: filterItem.id,
+									name: filterItem.title,
+									count: 1,
+								})
+							);
+						}}>
+						주문하기
+					</button>
 				</Col>
 			</Row>
 			{/* <InputGroup className='mb-3'>
