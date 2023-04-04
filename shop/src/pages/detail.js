@@ -16,7 +16,6 @@ function Detail(props) {
 	const [fade, setFade] = useState('');
 	const [shoes, setShoes] = useState(props.shoes);
 	const dispatch = useDispatch();
-
 	useEffect(
 		() => {
 			// 두번째로 코드 실행
@@ -39,8 +38,6 @@ function Detail(props) {
 		const regex = /^[0-9]+$/;
 		setIsNumber(regex.test(userInput));
 	}, [userInput]);
-	const { id } = useParams();
-	const filterItem = props.shoes.find((item) => item.id === Number(id));
 	useEffect(() => {
 		setTimeout(() => {
 			setFade('animation-end');
@@ -49,6 +46,16 @@ function Detail(props) {
 			clearTimeout();
 			setFade('');
 		};
+	}, []);
+	const { id } = useParams();
+	const filterItem = props.shoes.find((item) => item.id === Number(id));
+
+	useEffect(() => {
+		let watched = JSON.parse(localStorage.getItem('watched'));
+		watched.push(id);
+		watched = new Set(watched);
+		watched = Array.from(watched);
+		localStorage.setItem('watched', JSON.stringify(watched));
 	}, []);
 
 	return (

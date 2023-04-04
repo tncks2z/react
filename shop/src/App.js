@@ -1,8 +1,8 @@
 /* eslint-disable */
 
 import './App.css';
-import { Container, Row, Col, Nav, Navbar, Button } from 'react-bootstrap';
-import { createContext, useState } from 'react';
+import { Container, Row, Col, Nav, Navbar, Button, Badge } from 'react-bootstrap';
+import { createContext, useEffect, useState } from 'react';
 import data from './data.js';
 import { Routes, Route, Link, useNavigate, Outlet } from 'react-router-dom';
 import Detail from './pages/Detail';
@@ -14,8 +14,15 @@ export let Context1 = createContext();
 function App() {
 	const [shoes, setShoes] = useState(data);
 	const [moreCnt, setMoreCnt] = useState(0);
-	const [stock, setStock] = useState([10, 12, 15]);
 	const navigate = useNavigate();
+	const [watched, setWatched] = useState([]);
+	useEffect(() => {
+		if (!localStorage.getItem('watched')) {
+			localStorage.setItem('watched', JSON.stringify(watched));
+		} else {
+			setWatched(JSON.parse(localStorage.getItem('watched')));
+		}
+	}, []);
 	return (
 		<div className='App'>
 			<Navbar bg='light' variant='light' className='ps-3'>
@@ -58,7 +65,9 @@ function App() {
 					path='/'
 					element={
 						<>
-							<div className='main-bg'></div>
+							<div className='main-bg'>
+								<WatchedItemList shoes={shoes}></WatchedItemList>
+							</div>
 							<ItemList shoes={shoes}></ItemList>
 							{moreCnt === 2 ? null : (
 								<Button
@@ -84,7 +93,7 @@ function App() {
 													.catch((err) => {
 														console.log(err);
 													})
-											: alert('상품이 더 없습니다');
+											: null;
 										setMoreCnt(moreCnt + 1);
 										// 한번에 두개 이상 axios 요청할때
 										// Promise.all([axios.get('/url1'), axios.get('/url2')])
@@ -95,13 +104,7 @@ function App() {
 							)}
 						</>
 					}></Route>
-				<Route
-					path='/detail/:id'
-					element={
-						<Context1.Provider value={{ stock }}>
-							<Detail shoes={shoes} />
-						</Context1.Provider>
-					}></Route>
+				<Route path='/detail/:id' element={<Detail shoes={shoes} />}></Route>
 				<Route path='/cart' element={<Cart />}></Route>
 				<Route path='/about' element={<About />}>
 					<Route path='member' element={<h3>멤버임</h3>}></Route>
@@ -114,6 +117,26 @@ function App() {
 			</Routes>
 		</div>
 	);
+	function WatchedItemList(props) {
+		return (
+			<Container className='float-end text-end mt-5 '>
+				<h4>
+					<Badge bg='light' text='dark'>
+						최근에 본 상품
+					</Badge>
+				</h4>
+				<Row>
+					{watched.map(function (itemId, index) {
+						return (
+							<Col md={12} key={index}>
+								<h5 className='text-white'>{props.shoes[itemId].title}</h5>
+							</Col>
+						);
+					})}
+				</Row>
+			</Container>
+		);
+	}
 	function ItemList(props) {
 		return (
 			<Container>
