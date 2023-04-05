@@ -8,6 +8,7 @@ import { Routes, Route, Link, useNavigate, Outlet } from 'react-router-dom';
 import Detail from './pages/Detail';
 import Cart from './pages/Cart';
 import axios from 'axios';
+import { useQuery } from '@tanstack/react-query';
 
 export let Context1 = createContext();
 
@@ -23,6 +24,19 @@ function App() {
 			setWatched(JSON.parse(localStorage.getItem('watched')));
 		}
 	}, []);
+
+	let result = useQuery(
+		['user'],
+		() =>
+			axios
+				.get('https://codingapple1.github.io/userdata.json')
+				.then((response) => response.data)
+				.catch((error) => {
+					console.log(error);
+				}),
+		{ staleTime: 2000 } //2초 마다 refetch
+	);
+
 	return (
 		<div className='App'>
 			<Navbar bg='light' variant='light' className='ps-3'>
@@ -59,15 +73,14 @@ function App() {
 						Cart
 					</Nav.Link>
 				</Nav>
+				<Nav className='ms-auto me-3'>{result.isLoading ? '로딩중' : result.data.name + '님'}</Nav>
 			</Navbar>
 			<Routes>
 				<Route
 					path='/'
 					element={
 						<>
-							<div className='main-bg'>
-								<WatchedItemList shoes={shoes}></WatchedItemList>
-							</div>
+							<div className='main-bg'>{watched.length > 0 ? <WatchedItemList shoes={shoes}></WatchedItemList> : null}</div>
 							<ItemList shoes={shoes}></ItemList>
 							{moreCnt === 2 ? null : (
 								<Button
@@ -120,20 +133,16 @@ function App() {
 	function WatchedItemList(props) {
 		return (
 			<Container className='float-end text-end mt-5 '>
-				<h4>
+				<h3>
 					<Badge bg='light' text='dark'>
 						최근에 본 상품
 					</Badge>
-				</h4>
-				<Row>
+				</h3>
+				<div className='d-flex flex-column'>
 					{watched.map(function (itemId, index) {
-						return (
-							<Col md={12} key={index}>
-								<h5 className='text-white'>{props.shoes[itemId].title}</h5>
-							</Col>
-						);
+						return <h5 className='text-white'>{props.shoes[itemId].title}</h5>;
 					})}
-				</Row>
+				</div>
 			</Container>
 		);
 	}
