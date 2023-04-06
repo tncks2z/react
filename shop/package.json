@@ -18,7 +18,7 @@
 		"react-scripts": "5.0.1",
 		"web-vitals": "^2.1.4"
 	},
-	"homepage": "http://tncks2z.github.io/react-project",
+	"homepage": "http://tncks2z.github.io/reactproject",
 	"scripts": {
 		"start": "react-scripts start",
 		"build": "react-scripts build",
