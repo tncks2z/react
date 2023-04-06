@@ -23,7 +23,10 @@ function App() {
 		} else {
 			setWatched(JSON.parse(localStorage.getItem('watched')));
 		}
-	}, []);
+		return () => {
+			localStorage.clear();
+		};
+	}, [watched]);
 
 	let result = useQuery(
 		['user'],
@@ -47,12 +50,6 @@ function App() {
 							navigate('/');
 						}}>
 						Home
-					</Nav.Link>
-					<Nav.Link
-						onClick={() => {
-							navigate('/detail/0');
-						}}>
-						Detail
 					</Nav.Link>
 					<Nav.Link
 						onClick={() => {
@@ -80,7 +77,7 @@ function App() {
 					path='/'
 					element={
 						<>
-							<div className='main-bg'>{watched.length > 0 ? <WatchedItemList shoes={shoes}></WatchedItemList> : null}</div>
+							<div className='main-bg'></div>
 							<ItemList shoes={shoes}></ItemList>
 							{moreCnt === 2 ? null : (
 								<Button
@@ -130,29 +127,38 @@ function App() {
 			</Routes>
 		</div>
 	);
-	function WatchedItemList(props) {
-		return (
-			<Container className='float-end text-end mt-5 '>
-				<h3>
-					<Badge bg='light' text='dark'>
-						최근에 본 상품
-					</Badge>
-				</h3>
-				<div className='d-flex flex-column'>
-					{watched.map(function (itemId, index) {
-						return <h5 className='text-white'>{props.shoes[itemId].title}</h5>;
-					})}
-				</div>
-			</Container>
-		);
-	}
+	// function WatchedItemList(props) {
+	// 	return (
+	// 		<Container className='float-end text-end mt-5 '>
+	// 			<h3>
+	// 				<Badge bg='light' text='dark'>
+	// 					최근에 본 상품
+	// 				</Badge>
+	// 			</h3>
+	// 			<div className='d-flex flex-column'>
+	// 				{watched.map(function (itemId, index) {
+	// 					return (
+	// 						<h5 className='text-white' key={index}>
+	// 							{props.shoes[itemId].title}
+	// 						</h5>
+	// 					);
+	// 				})}
+	// 			</div>
+	// 		</Container>
+	// 	);
+	// }
 	function ItemList(props) {
 		return (
 			<Container>
 				<Row>
 					{props.shoes.map(function (item, index) {
 						return (
-							<Col md={4} key={index}>
+							<Col
+								md={4}
+								key={index}
+								onClick={() => {
+									navigate('/detail/' + index);
+								}}>
 								{/* public 폴더에서 이미지 경로 : process.env.PUBLIC_URL + '/logo192.png' */}
 								<img src={'https://codingapple1.github.io/shop/shoes' + (index + 1) + '.jpg'} alt='' width='80%' />
 								<h4>{item.title}</h4>
