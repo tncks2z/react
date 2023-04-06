@@ -43,7 +43,12 @@ function App() {
 	return (
 		<div className='App'>
 			<Navbar bg='light' variant='light' className='ps-3'>
-				<Navbar.Brand href='/'>수찬이네</Navbar.Brand>
+				<Navbar.Brand
+					onClick={() => {
+						navigate('/');
+					}}>
+					수찬이네
+				</Navbar.Brand>
 				<Nav className='me-auto'>
 					<Nav.Link
 						onClick={() => {
