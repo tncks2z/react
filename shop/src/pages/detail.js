@@ -1,11 +1,10 @@
 /* eslint-disable */
 
 import { useEffect, useState, useContext } from 'react';
-import { Container, Row, Col, InputGroup, Form, Nav } from 'react-bootstrap';
+import { Container, Row, Col, InputGroup, Form, Nav, Table, Card } from 'react-bootstrap';
 import { useParams } from 'react-router-dom';
 import '../App.css';
-import { Context1 } from './../App';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { addItem } from '../store';
 
 function Detail(props) {
@@ -50,14 +49,6 @@ function Detail(props) {
 	const { id } = useParams();
 	const filterItem = props.shoes.find((item) => item.id === Number(id));
 
-	useEffect(() => {
-		let watched = JSON.parse(localStorage.getItem('watched'));
-		watched.push(id);
-		watched = new Set(watched);
-		watched = Array.from(watched);
-		localStorage.setItem('watched', JSON.stringify(watched));
-	}, []);
-
 	return (
 		<Container className={`animation-start ${fade}`}>
 			{/* {isAlert ? <div className='alert alert-danger'>2초이내 구매시 할인</div> : null} */}
@@ -77,6 +68,7 @@ function Detail(props) {
 									id: filterItem.id,
 									name: filterItem.title,
 									count: 1,
+									price: filterItem.price,
 								})
 							);
 						}}>
@@ -96,49 +88,95 @@ function Detail(props) {
 			<Nav variant='tabs' defaultActiveKey='0'>
 				<Nav.Item>
 					<Nav.Link eventKey='0' onClick={() => setTab(0)}>
-						HTML
+						상품상세
 					</Nav.Link>
 				</Nav.Item>
 				<Nav.Item>
 					<Nav.Link eventKey='1' onClick={() => setTab(1)}>
-						CSS
+						상품평
 					</Nav.Link>
 				</Nav.Item>
 				<Nav.Item>
 					<Nav.Link eventKey='2' onClick={() => setTab(2)}>
-						JavaScript
+						상품문의
 					</Nav.Link>
 				</Nav.Item>
 			</Nav>
-			<TabContent tab={tab} shoes={shoes}></TabContent>
+			<TabContent tab={tab} shoes={filterItem}></TabContent>
 		</Container>
 	);
 }
 function TabContent({ tab, shoes }) {
+	const store = useSelector((state) => state);
+	const filterItem = store.review.filter((review) => review.shoesId === shoes.id);
 	return [
 		<div className='tab-content'>
-			<h5>HTML</h5>
-			<p>
-				The HyperText Markup Language or HTML is the standard markup language for documents designed to be displayed in a web browser. It is often assisted by technologies such as Cascading Style
-				Sheets (CSS) and scripting languages such as JavaScript.
-			</p>
+			<p style={{ fontWeight: 'bold' }}>필수 표기정보</p>
+			<Table striped='columns' bordered>
+				<tbody>
+					<tr>
+						<td>제품명</td>
+						<td>{shoes.title}</td>
+						<td>상품의 주소재</td>
+						<td>겉감-메쉬 / 안감-메쉬 / 아웃솔-EVA</td>
+					</tr>
+					<tr>
+						<td>치수</td>
+						<td>컨텐츠 참조</td>
+						<td>제조국</td>
+						<td>{shoes.content}</td>
+					</tr>
+					<tr>
+						<td>색상</td>
+						<td>black</td>
+						<td>제조자(수입자)</td>
+						<td>수찬이네</td>
+					</tr>
+				</tbody>
+			</Table>
+		</div>,
+		<div className='tab-content d-flex justify-content-between'>
+			{filterItem.length === 0 ? (
+				<p>등록된 상품평이 없습니다</p>
+			) : (
+				<Row>
+					<Col>
+						{filterItem.map((review, index) => {
+							return (
+								<Card bg='light' key={index} width={'100%'} className='mb-2'>
+									<Card.Header className='d-flex justify-content-between'>
+										<span>{review.user}</span> <span>{'★'.repeat(review.rating) + '☆'.repeat(5 - review.rating)}</span>
+									</Card.Header>
+									<Card.Body>
+										<Card.Title>{review.review.length > 20 ? review.review.substring(0, 20) + '...' : review.review}</Card.Title>
+										<Card.Text>{review.review}</Card.Text>
+									</Card.Body>
+								</Card>
+							);
+						})}
+					</Col>
+				</Row>
+			)}
 		</div>,
 		<div className='tab-content'>
-			<h5>CSS</h5>
-			<p>
-				Cascading Style Sheets (CSS) is a style sheet language used for describing the presentation of a document written in a markup language such as HTML or XML (including XML dialects such as SVG,
-				MathML or XHTML).[1] CSS is a cornerstone technology of the World Wide Web, alongside HTML and JavaScript.[2]
-			</p>
-		</div>,
-		<div className='tab-content'>
-			<h5>JS</h5>
-			<p>
-				JavaScript (/ˈdʒɑːvəskrɪpt/), often abbreviated as JS, is a programming language that is one of the core technologies of the World Wide Web, alongside HTML and CSS. As of 2022, 98% of websites
-				use JavaScript on the client side for webpage behavior, often incorporating third-party libraries. All major web browsers have a dedicated JavaScript engine to execute the code on users'
-				devices
-			</p>
+			<p style={{ fontWeight: 'bold' }}>상품문의</p>
+			<ul>
+				<li>
+					구매한 상품의 <span style={{ fontWeight: 'bold' }}>취소/반품은 구매내역에서 신청</span> 가능합니다.
+				</li>
+				<li>상품문의 및 후기게시판을 통해 취소나 환불, 반품 등은 처리되지 않습니다.</li>
+				<li>
+					<span style={{ fontWeight: 'bold' }}>가격, 판매자, 교환/환불 및 배송 등 해당 상품 자체와 관련 없는 문의는 고객센터 내 1:1 문의하기</span>를 이용해주세요.
+				</li>
+				<li>
+					<span style={{ fontWeight: 'bold' }}>"해당 상품 자체"와 관계없는 글, 양도, 광고성, 욕설, 비방, 도배 등의 글은 예고 없이 이동, 노출제한, 삭제 등의 조치가 취해질 수 있습니다.</span>
+				</li>
+				<li>공개 게시판이므로 전화번호, 메일 주소 등 고객님의 소중한 개인정보는 절대 남기지 말아주세요.</li>
+			</ul>
 		</div>,
 	][tab];
 }
-
+function Review() {
+	return <div></div>;
+}
 export default Detail;

@@ -10,8 +10,6 @@ import Cart from './pages/Cart';
 import axios from 'axios';
 import { useQuery } from '@tanstack/react-query';
 
-export let Context1 = createContext();
-
 function App() {
 	const [shoes, setShoes] = useState(data);
 	const [moreCnt, setMoreCnt] = useState(0);
