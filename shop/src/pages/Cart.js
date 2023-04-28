@@ -12,7 +12,16 @@ function Cart() {
 		document.body.style = `overflow: hidden`;
 		return () => (document.body.style = `overflow: auto`);
 	}, []);
-
+	const [fade, setFade] = useState('');
+	useEffect(() => {
+		setTimeout(() => {
+			setFade('animation-end');
+		}, 100);
+		return () => {
+			clearTimeout();
+			setFade('');
+		};
+	}, []);
 	const navigate = useNavigate();
 	const store = useSelector((state) => state);
 	const dispatch = useDispatch(); // store.js로 요청을 보내주는 함수
@@ -27,7 +36,7 @@ function Cart() {
 	return (
 		<>
 			{modalOn ? <Receipt setModalOn={setModalOn} store={store} getTotalPrice={getTotalPrice} dispatch={dispatch} /> : null}
-			<div className='mt-3'>
+			<div className={`mt-3 animation-start ${fade}`}>
 				<h2>장바구니</h2>
 				{store.cart.length > 0 ? (
 					<>
