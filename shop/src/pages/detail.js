@@ -53,10 +53,10 @@ function Detail(props) {
 		<Container className={`animation-start ${fade}`}>
 			{/* {isAlert ? <div className='alert alert-danger'>2초이내 구매시 할인</div> : null} */}
 			<Row>
-				<Col>
-					<img src={'https://codingapple1.github.io/shop/shoes' + (Number(filterItem.id) + 1) + '.jpg'} alt='' width='100%' />
+				<Col className='d-flex justify-content-center align-items-center'>
+					<img src={'https://codingapple1.github.io/shop/shoes' + (Number(filterItem.id) + 1) + '.jpg'} alt='준비된 상품의 이미지가 없습니다' width='100%' />
 				</Col>
-				<Col>
+				<Col className='d-flex flex-column justify-content-center align-items-center'>
 					<h4 className='pt-5'>{filterItem.title}</h4>
 					<h6>{filterItem.content}</h6>
 					<p>{[filterItem.price].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')} 원</p>
@@ -115,29 +115,29 @@ function TabContent({ tab, shoes }) {
 			<Table striped='columns' bordered>
 				<tbody>
 					<tr>
-						<td>제품명</td>
+						<th>제품명</th>
 						<td>{shoes.title}</td>
-						<td>상품의 주소재</td>
+						<th>상품의 주소재</th>
 						<td>겉감-메쉬 / 안감-메쉬 / 아웃솔-EVA</td>
 					</tr>
 					<tr>
-						<td>치수</td>
+						<th>치수</th>
 						<td>컨텐츠 참조</td>
-						<td>제조국</td>
+						<th>제조국</th>
 						<td>{shoes.content}</td>
 					</tr>
 					<tr>
-						<td>색상</td>
+						<th>색상</th>
 						<td>black</td>
-						<td>제조자(수입자)</td>
+						<th>제조자(수입자)</th>
 						<td>수찬이네</td>
 					</tr>
 				</tbody>
 			</Table>
 		</div>,
-		<div className='tab-content d-flex justify-content-between'>
+		<div className='tab-content d-flex justify-content-between align-items-center'>
 			{filterItem.length === 0 ? (
-				<p>등록된 상품평이 없습니다</p>
+				<h6 className='mt-3 mb-3'>등록된 상품평이 없습니다</h6>
 			) : (
 				<Row>
 					<Col>
@@ -175,8 +175,5 @@ function TabContent({ tab, shoes }) {
 			</ul>
 		</div>,
 	][tab];
-}
-function Review() {
-	return <div></div>;
 }
 export default Detail;

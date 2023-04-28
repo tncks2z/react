@@ -1,10 +1,19 @@
 import '../App.css';
 import { Table, Button } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
-import { addCount, reduceCount, removeItem } from '../store';
-import { useState } from 'react';
+import { addCount, reduceCount, removeItem, clearItem } from '../store';
+import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useQuery } from '@tanstack/react-query';
+import axios from 'axios';
 
 function Cart() {
+	useEffect(() => {
+		document.body.style = `overflow: hidden`;
+		return () => (document.body.style = `overflow: auto`);
+	}, []);
+
+	const navigate = useNavigate();
 	const store = useSelector((state) => state);
 	const dispatch = useDispatch(); // store.js로 요청을 보내주는 함수
 	const [modalOn, setModalOn] = useState(false);
@@ -17,7 +26,7 @@ function Cart() {
 	}
 	return (
 		<>
-			{modalOn ? <Receipt setModalOn={setModalOn} /> : null}
+			{modalOn ? <Receipt setModalOn={setModalOn} store={store} getTotalPrice={getTotalPrice} dispatch={dispatch} /> : null}
 			<div className='mt-3'>
 				<h2>장바구니</h2>
 				{store.cart.length > 0 ? (
@@ -85,13 +94,43 @@ function Cart() {
 						</div>
 					</>
 				) : (
-					<h5 className='mt-5'>장바구니에 담긴 물건이 없습니다</h5>
+					<div>
+						<h4 className='mt-5  mb-3'>장바구니에 담은 상품이 없습니다</h4>
+						<Button
+							onClick={() => {
+								navigate('/');
+							}}>
+							상품 보러가기
+						</Button>
+					</div>
 				)}
 			</div>
 		</>
 	);
 }
-function Receipt({ setModalOn }) {
+function Receipt({ setModalOn, store, getTotalPrice, dispatch }) {
+	const result = useQuery(
+		['user'],
+		() =>
+			axios
+				.get('https://codingapple1.github.io/userdata.json')
+				.then((response) => response.data)
+				.catch((error) => {
+					console.log(error);
+				}),
+		{ staleTime: 2000 } //2초 마다 refetch
+	);
+	function getPay() {
+		let pay = window.confirm('결제 하시겠습니까?');
+		if (pay) {
+			alert('결제 되었습니다');
+			setModalOn(false);
+			dispatch(clearItem([]));
+		} else {
+			alert('결제가 취소되었습니다');
+			setModalOn(false);
+		}
+	}
 	return (
 		<div
 			className='receipt-bg'
@@ -101,10 +140,28 @@ function Receipt({ setModalOn }) {
 				}
 			}}>
 			<div className='receipt-container'>
-				<h4 style={{ verticalAlign: 'middle' }}>영수증</h4>
-				<Button variant='danger' onClick={() => setModalOn(false)}>
-					닫기
-				</Button>
+				<h4 style={{ verticalAlign: 'middle' }} className='mt-3 mb-3'>
+					영수증
+				</h4>
+				<h5 className='ms-auto me-3'>{result.isLoading ? '로딩중' : result.data.name + '님'}</h5>
+				{store.cart.map((item, index) => {
+					return (
+						<div className='mt-3' key={index}>
+							<h5>상품명 : {item.name}</h5>
+							<h6>가격 : {[item.price].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}원</h6>
+							<h6>수량 : {item.count}</h6>
+						</div>
+					);
+				})}
+				<h5 className='mt-5'>총 가격 : {[getTotalPrice()].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}원</h5>
+				<div className='mt-3 mb-3'>
+					<Button variant='outline-primary' onClick={() => getPay()}>
+						결재
+					</Button>
+					<Button variant='outline-danger' onClick={() => setModalOn(false)}>
+						닫기
+					</Button>
+				</div>
 			</div>
 		</div>
 	);

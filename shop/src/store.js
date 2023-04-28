@@ -43,9 +43,13 @@ const cart = createSlice({
 			const filterState = state.filter((item) => item.id !== action.payload);
 			return filterState;
 		},
+		clearItem(state) {
+			state = [];
+			return state;
+		},
 	},
 });
-export let { reduceCount, addCount, addItem, removeItem } = cart.actions;
+export let { reduceCount, addCount, addItem, removeItem, clearItem } = cart.actions;
 
 const review = createSlice({
 	name: 'review',
@@ -61,14 +65,14 @@ const review = createSlice({
 		},
 		{
 			shoesId: 1,
-			id: 1,
+			id: 0,
 			user: 'suchan',
 			review: '색깔이 너무 마음에 드네요 많이 파세요~',
 			rating: 5,
 		},
 		{
 			shoesId: 2,
-			id: 1,
+			id: 0,
 			user: 'suchan',
 			review: '가격에 비해 신발 쫀쫀함이 없는거같아요ㅠㅠ 패션용으로만 신어야겠어요 디자인은 진짜 체고체고',
 			rating: 3,

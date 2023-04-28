@@ -9,8 +9,10 @@ import Detail from './pages/Detail';
 import Cart from './pages/Cart';
 import axios from 'axios';
 import { useQuery } from '@tanstack/react-query';
+import { useSelector } from 'react-redux';
 
 function App() {
+	const cart = useSelector((state) => state.cart);
 	const [shoes, setShoes] = useState(data);
 	const [moreCnt, setMoreCnt] = useState(0);
 	const navigate = useNavigate();
@@ -66,11 +68,29 @@ function App() {
 						}}>
 						Event
 					</Nav.Link>
+					{/* {cart.length === 0 ? (
+						<Nav.Link
+							onClick={() => {
+								navigate('/cart');
+							}}>
+							Cart
+						</Nav.Link>
+					) : (
+						<Nav.Link
+							onClick={() => {
+								navigate('/cart');
+							}}>
+							Cart
+							<Badge bg='danger' pill>
+								{cart.length}
+							</Badge>
+						</Nav.Link>
+					)} */}
 					<Nav.Link
 						onClick={() => {
 							navigate('/cart');
 						}}>
-						Cart
+						Cart{cart.length === 0 ? null : <Badge bg='danger'>{cart.length}</Badge>}
 					</Nav.Link>
 				</Nav>
 				<Nav className='ms-auto me-3'>{result.isLoading ? '로딩중' : result.data.name + '님'}</Nav>
@@ -159,11 +179,12 @@ function App() {
 							<Col
 								md={4}
 								key={index}
+								className='d-flex flex-column align-items-center justify-content-center'
 								onClick={() => {
 									navigate('/detail/' + index);
 								}}>
 								{/* public 폴더에서 이미지 경로 : process.env.PUBLIC_URL + '/logo192.png' */}
-								<img src={'https://codingapple1.github.io/shop/shoes' + (index + 1) + '.jpg'} alt='' width='80%' />
+								<img src={'https://codingapple1.github.io/shop/shoes' + (index + 1) + '.jpg'} alt='준비된 상품의 이미지가 없습니다' width='80%' />
 								<h4>{item.title}</h4>
 								{/* <h6>{item.content}</h6> */}
 								<p>{[item.price].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')} 원</p>
